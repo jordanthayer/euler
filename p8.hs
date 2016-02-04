@@ -5,3 +5,16 @@ number = 73167176531330624919225119674426574742355349194934969835203127745063262
 asString = show number
 
 asDigitList = [ read (x:[]) :: Integer | x <- asString ]
+
+{- If I weren't lazy, I'd use a ring buffer here. -}
+getFront :: Integer -> [Integer] -> [Integer]
+getFront 0 _ = []
+getFront i (hd:tl) = hd : getFront (i - 1) tl
+
+solve :: [Integer] -> Integer
+solve lst =
+    if length lst < 13
+    then 0
+    else
+        max (product (getFront 13 lst)) $ solve (tail lst)
+
